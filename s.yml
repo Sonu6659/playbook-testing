@@ -1,18 +1,47 @@
-version: v1.0
-name: Hello World Pipeline
+import multiprocessing
+import time
 
-blocks:
-  - name: Hello World
-    task:
-      jobs:
-        - name: Execute Playbook
-          commands:
-            - |
-              start_time=$(date +%s)
+# Function to print "Hello, World!"
+def print_hello_world():
+    print("Hello, World!")
 
-              # Replace the following command with the actual Ansible playbook execution
-              semaphore-playbook play-testing.yml
+# Function to save execution time to a file
+def save_execution_time(file_path, execution_time):
+    with open(file_path, "w") as time_file:
+        time_file.write(str(execution_time))
 
-              end_time=$(date +%s)
-              run_time=$((end_time - start_time))
-              echo "Running Time: $run_time seconds" > running_time.txt
+if __name__ == "__main__":
+    # File path to save the execution time
+    time_file_path = "execution_time.txt"
+
+    # Create a semaphore with one permit (binary semaphore)
+    semaphore = multiprocessing.Semaphore(1)
+
+    # Function to execute with semaphore-controlled access
+    def semaphore_controlled_execution():
+        # Acquire the semaphore (lock)
+        semaphore.acquire()
+
+        # Print "Hello, World!"
+        print_hello_world()
+
+        # Save execution time to the file
+        execution_time = time.time()
+        save_execution_time(time_file_path, execution_time)
+
+        # Release the semaphore (unlock)
+        semaphore.release()
+
+    # Create multiple processes to execute the function in parallel
+    num_processes = 5
+    processes = []
+    for _ in range(num_processes):
+        process = multiprocessing.Process(target=semaphore_controlled_execution)
+        processes.append(process)
+        process.start()
+
+    # Wait for all processes to finish
+    for process in processes:
+        process.join()
+
+    print("Execution time saved to:", time_file_path)
