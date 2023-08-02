@@ -5,7 +5,7 @@
   tasks:
     - name: Create semaphore file
       ansible.builtin.file:
-        path: https://github.com/Sonu6659/playbook-testing/blob/main/play-testing.yml
+        path: /home/sonu/play-testing.ynl
         state: touch
 
     - name: Acquire semaphore lock
