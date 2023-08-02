@@ -1,23 +1,21 @@
-import time
+---
+- name: Hello World Playbook
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Create semaphore file
+      ansible.builtin.file:
+        path: https://github.com/Sonu6659/playbook-testing/blob/main/play-testing.yml
+        state: touch
 
-def print_hello_world():
-    print("Hello, World!")
+    - name: Acquire semaphore lock
+      ansible.builtin.shell:
+        cmd: "flock -x /tmp/semaphore_file sleep 0"
 
-def save_execution_time(file_path, execution_time):
-    with open(file_path, "w") as time_file:
-        time_file.write(str(execution_time))
+    - name: Print "Hello, World!"
+      ansible.builtin.debug:
+        msg: "Hello, World!"
 
-if __name__ == "__main__":
-    start_time = time.time()
-
-    # Your main playbook code goes here
-     print("Hello, World!")
-
-    end_time = time.time()
-    execution_time = end_time - start_time
-
-    # File path to save the execution time
-    https://github.com/Sonu6659/playbook-testing/blob/main/play-testing.yml = "execution_time.txt"
-    save_execution_time(https://github.com/Sonu6659/playbook-testing/blob/main/play-testing.yml, execution_time)
-
-    print("Execution time saved to:", https://github.com/Sonu6659/playbook-testing/blob/main/play-testing.yml)
+    - name: Release semaphore lock
+      ansible.builtin.shell:
+        cmd: "flock -u /tmp/semaphore_file sleep 0"
