@@ -1,21 +1,13 @@
 ---
-- name: Hello World Playbook
-  hosts: localhost
-  gather_facts: no
-  tasks:
-    - name: Create semaphore file
-      ansible.builtin.file:
-        path: /tmp/testp.yml
-        state: touch
+- name: Print Hello, World! and Save Execution Time
+  hosts: localhost
+  gather_facts: false
 
-    - name: Acquire semaphore lock
-      ansible.builtin.shell:
-        cmd: "flock -x /tmp/semaphore_file sleep 0"
+  tasks:
+    - name: Print Hello, World!
+      debug:
+        msg: "Hello, World!"
 
-    - name: Print "Hello, World!"
-      ansible.builtin.debug:
-        msg: "Hello, World!"
+    - name: Save Execution Time
+      local_action: shell date +%Y-%m-%d_%H-%M-%S > /tmp/time_file.txt
 
-    - name: Release semaphore lock
-      ansible.builtin.shell:
-        cmd: "flock -u /tmp/semaphore_file sleep 0"
