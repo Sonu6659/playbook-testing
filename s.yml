@@ -1,7 +1,7 @@
 ---
 - name: Hello World Playbook
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   tasks:
 	- name: Create semaphore file
   	ansible.builtin.file:
@@ -10,7 +10,7 @@
 
 	- name: Acquire semaphore lock
   	ansible.builtin.shell:
-    	cmd: "flock /tmp/semaphore_file sleep 0"
+    	cmd: "flock -x /tmp/semaphore_file sleep 0"
 
 	- name: Print "Hello, World!"
   	ansible.builtin.debug:
