@@ -10,7 +10,7 @@
 
     - name: Acquire semaphore lock
       ansible.builtin.shell:
-        cmd: "flock /tmp/semaphore_file sleep 0"
+        cmd: "flock -x /tmp/semaphore_file sleep 0"
 
     - name: Print "Hello, World!"
       ansible.builtin.debug:
