@@ -1,21 +1,26 @@
 ---
-- name: Hello World Playbook
+- name: Semaphore Hello World
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   tasks:
-	- name: Create semaphore file
-  	ansible.builtin.file:
-    	path: /tmp/testp.yml
-    	state: touch
+    - name: Display Hello World
+      debug:
+        msg: "Hello, World!"
 
-	- name: Acquire semaphore lock
-  	ansible.builtin.shell:
-    	cmd: "flock -x /tmp/semaphore_file sleep 0"
+    # Register a variable to store the start time
+    - name: Record start time
+      set_fact:
+        start_time: "{{ ansible_date_time.epoch }}"
 
-	- name: Print "Hello, World!"
-  	ansible.built in.debug:
-    	msg: "Hello, World!"
+    # Some other tasks...
 
-	- name: Release semaphore lock
-  	ansible.builtin.shell:
-    	cmd: "flock -u /tmp/semaphore_file sleep 0"
+    # Task to calculate the execution time
+    - name: Calculate execution time
+      set_fact:
+        execution_time: "{{ ansible_date_time.epoch | float - start_time | float }}"
+
+    # Task to save the execution time to a file
+    - name: Save execution time to file
+      copy:
+        content: "{{ execution_time }}"
+        dest: "execution_time.txt"
