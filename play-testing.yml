@@ -5,13 +5,13 @@
   tasks:
     - name: Create semaphore file
       ansible.builtin.file:
-        path: /home/sonu/singga/testp.yml
+        path: /tmp/testp.yml
         state: touch
 
     - name: Download playbook file from GitHub
       ansible.builtin.get_url:
         url: https://github.com/Sonu6659/playbook-testing/edit/main/
-        dest: /home/sonu/singga/testp.yml
+        dest: /tmp/testp.yml
       register: download_result
       ignore_errors: yes
 
@@ -25,7 +25,7 @@
         cmd: "flock -x /tmp/semaphore_file sleep 0"
 
     - name: Include downloaded playbook
-      ansible.builtin.include_playbook: /home/sonu/singga/testp.yml
+      ansible.builtin.include_playbook: /tmp/testp.yml
     - name: Release semaphore lock
       ansible.builtin.shell:
         cmd: "flock -u /tmp/semaphore_file sleep 0"
