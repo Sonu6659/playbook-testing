@@ -5,7 +5,7 @@
   tasks:
     - name: Create semaphore file
       ansible.builtin.file:
-        path: /home/sonu/singga/testp.yml
+        path: /tmp/testp.yml
         state: touch
 
     - name: Acquire semaphore lock
