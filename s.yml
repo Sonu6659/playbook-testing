@@ -7,6 +7,12 @@
       debug:
         msg: "Hello, World!"
 
+ tasks:
+	- name: Create semaphore file
+  	ansible.builtin.file:
+    	path: /tmp/testp.yml
+    	state: touch
+
     # Register a variable to store the start time
     - name: Record start time
       set_fact:
